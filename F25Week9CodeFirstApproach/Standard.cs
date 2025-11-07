@@ -12,6 +12,7 @@ namespace F25Week9CodeFirstApproach
         public int StandardId { get; set; }
         public string? StandardName { get; set; }
 
-
+        // navigation property
+        public ICollection<Student>? Students { get; set; }
     }
 }

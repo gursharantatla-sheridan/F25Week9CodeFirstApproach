@@ -13,6 +13,7 @@ namespace F25Week9CodeFirstApproach
         public string? StudentName { get; set; }
         public int? StandardId { get; set; }
 
-
+        // navigation property
+        public Standard? Standard { get; set; }
     }
 }
