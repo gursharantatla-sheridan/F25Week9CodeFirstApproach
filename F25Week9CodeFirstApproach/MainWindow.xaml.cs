@@ -25,7 +25,8 @@ namespace F25Week9CodeFirstApproach
 
         private void LoadStudents()
         {
-            grdStudents.ItemsSource = db.Students.ToList();
+            var students = db.Students.Select(s => new { s.StudentId, s.StudentName, s.Standard.StandardName }).ToList();
+            grdStudents.ItemsSource = students;
         }
 
         private void btnLoadStudents_Click(object sender, RoutedEventArgs e)
@@ -51,6 +52,59 @@ namespace F25Week9CodeFirstApproach
 
             LoadStudents();
             MessageBox.Show("New student added");
+        }
+
+        private void btnFind_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32(txtId.Text);
+            var std = db.Students.Find(id);
+
+            if (std != null)
+            {
+                txtName.Text = std.StudentName;
+                cmbStandard.SelectedValue = std.StandardId;
+            }
+            else
+            {
+                txtName.Text = "";
+                cmbStandard.SelectedIndex = -1;
+                MessageBox.Show("Invalid ID. Please try again");
+            }
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32(txtId.Text);
+            var std = db.Students.Find(id);
+
+            std.StudentName = txtName.Text;
+            std.StandardId = (int)cmbStandard.SelectedValue;
+
+            db.SaveChanges();
+
+            LoadStudents();
+            MessageBox.Show("Student updated");
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32(txtId.Text);
+            var std = db.Students.Find(id);
+
+            db.Students.Remove(std);
+            db.SaveChanges();
+
+            LoadStudents();
+            MessageBox.Show("Student deleted");
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            var students = db.Students
+                             .Where(s => s.StudentName.Contains(txtName.Text))
+                             .ToList();
+
+            grdStudents.ItemsSource = students;
         }
     }
 }
